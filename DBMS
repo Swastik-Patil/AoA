@@ -1,0 +1,215 @@
+// DDL
+CREATE TABLE dept
+( deptno NUMBER(2),
+dname VARCHAR2(14),
+loc VARCHAR2(13));
+
+ALTER TABLE dept80
+ADD (job_id VARCHAR2(9));
+
+ALTER TABLE dept80
+MODIFY (last_name VARCHAR2(30));
+
+DROP TABLE dept80;
+Table dropped.
+
+// DML 
+INSERT INTO departments(department_id, department_name, manager_id, location_id)
+VALUES (70, 'Public Relations', 100, 1700);
+
+SELECT *
+FROM departments;
+SELECT department_id, location_id
+FROM departments;
+
+UPDATE employees
+SET department_id = 70
+WHERE employee_id = 113;
+
+DELETE FROM departments
+WHERE department_name = ’Finance’;
+
+// DCL 
+
+Grant SELECT on Employee to A;
+Grant SELECT,INSERT on Employee to A;
+Grant ALL on object-name to user-name;
+
+Revoke SELECT on EMPLOYEE from A
+Revoke ALL on Employee from A
+
+Create user A identified by a1234
+
+// TCL
+Commit;
+Rollback;
+
+// Constraint
+
+Create table person (p_idint NOT NULL ,LastNamevarchar(255) NOT NULL,
+firstnamevarchar(255),address varchar(244),city varchar(255),Primary key(p_id));
+
+CREATE TABLE table_name (
+    column1 datatype PRIMARY KEY,
+    column2 datatype,
+    column3 datatype,
+    FOREIGN KEY (column2) REFERENCES related_table(related_column)
+);
+
+Create table person (p_idint NOT NULL ,LastNamevarchar(255) NOT NULL,
+firstnamevarchar(255),address varchar(244),city varchar(255));
+
+Create table person (p_idint NOT NULL ,LastNamevarchar(255) NOT NULL,
+firstnamevarchar(255),address varchar(244),city varchar(255) , CHECK (p_id> 0));    
+
+Create table person (p_idint NOT NULL ,LastNamevarchar(255) NOT NULL,
+firstnamevarchar(255),address varchar(244),city varchar(255) , DEFAULT ‘vimeet’);
+
+// Aggregate Function
+
+Select * from Min(Column name) from table _name;
+Select * from Max(Column name) from table _name;
+Select * from Avg(Column name) from table _name;
+Select * from Sum(Column name) from table _name;
+Select * from Lower(Column name) from table _name;
+Select * from Upper(Column name) from table _name;
+
+// Set operations 
+
+SELECT column1, column2 FROM table1
+UNION
+SELECT column1, column2 FROM table2;
+
+SELECT column1, column2 FROM table1
+UNION ALL
+SELECT column1, column2 FROM table2;
+
+SELECT column1, column2 FROM table1
+INTERSECT
+SELECT column1, column2 FROM table2;
+
+SELECT column1, column2 FROM table1
+EXCEPT
+SELECT column1, column2 FROM table2;
+
+
+// GROUP BY CLAUSE
+
+SELECT department, COUNT(No_of_emp)
+FROM employees
+WHERE salary > 25000
+GROUP BY department;
+
+SELECT department,MAX(salary)
+FROM employees
+GROUP BY department;
+
+// HAVING CLAUSE
+
+SELECT department, SUM(sales)
+FROM order_details
+GROUP BY department
+HAVING SUM(sales) > 1000;
+
+SELECT department, COUNT(No_of_emp)
+FROM employees
+WHERE salary > 25000
+GROUP BY department
+HAVING COUNT(*) > 10;
+
+SELECT department, MIN(salary)
+FROM employees
+GROUP BY department
+HAVING MIN(salary) > 35000;
+
+// SUB Queries
+
+SELECT
+column_name[,column_name]
+FROM table1 [, table2 ]
+WHERE column_name
+OPERATOR (SELECT
+column_name[,column_name]
+FROM table1
+[, table2 ]
+[WHERE])
+
+// Nested Queries 
+INSERT INTO table_name[(column1 [, column2 ])]
+SELECT [*|column1 [, column2 ]
+FROM table1 [, table2 ]
+[ WHERE VALUE OPERATOR ]
+
+
+// Joins
+
+select column names
+from table_name1
+Cross join table_name2;
+
+Select column1, column2
+From table1
+natural join table2;
+
+Select table1.column, table2.column
+From table1
+Left outer join table2
+On (table1.column=table2.column);
+
+Select table1.column, table2.column
+From table1
+Right outer join table2
+On (table1.column = table2.column);
+
+Select table1.column, table2.column
+from table1
+Full outer join table2
+On (table1.column = table2.column)
+
+
+// VIEWS 
+CREATE VIEW VIEW_NAME
+AS SELECT employee_id ID_NUMBER, last_name NAME,
+Salary*12 ANN_SALARY
+FROM employees
+WHERE department_id = 50;
+
+// Retrieving Data from a View
+SELECT *
+FROM VIEW_NAME;
+
+// INDEX
+
+Simple index: It is created on single column of table
+
+    CREATE INDEX emp_last_name_idx
+    ON employees (last_name);
+
+Composite index: It is created on the multiple columns of the table.
+
+    CREATE INDEX emp_last_name_idx
+    ON employees (last_name,employee_id);
+
+// Triggers
+
+Create [or replace] trigger [scheme .] trigger
+{before | after | instead of }
+{dml_event_clause
+| {ddl_event [or dd1_event]...
+| database_event [or database_event]...
+}
+On { [schema .] schema | database }
+}
+[when ( condition) ]
+{pl/sql_block | call_procedure_statement}
+
+
+CREATE TRIGGER update_salary
+AFTER INSERT ON employees
+FOR EACH ROW
+BEGIN
+    UPDATE employees SET salary = 5000 WHERE id = NEW.id;
+END;
+
+
+DROP TRIGGER update_salary;
