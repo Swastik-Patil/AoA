@@ -1,25 +1,51 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+void disp(int arr[], int size)
+{
+    for (int i = 0; i < size + 1; i++)
+    {
+        printf("%d\t", arr[i]);
+    }
+    printf("\n");
+}
+
 int partition(int arr[], int left, int right)
 {
     int pivot = arr[left];
-    int i = left - 1;
-    int temp;
-    for (int j = left; j <= right - 1; j++)
+    bool istrue = true;
+    while (right != left)
     {
-        if (arr[j] < pivot)
+        if (istrue)
         {
-            i++;
-            temp = arr[i];
-            arr[i] = arr[j];
-            arr[j] = temp;
+            if (pivot < arr[right])
+            {
+                right--;
+            }
+            else
+            {
+                int temp = pivot;
+                arr[left] = arr[right];
+                arr[right] = pivot;
+                istrue = false;
+            }
+        }
+        else
+        {
+            if (pivot > arr[left])
+            {
+                left++;
+            }
+            else
+            {
+                int temp = pivot;
+                arr[right] = arr[left];
+                arr[left] = pivot;
+                istrue = true;
+            }
         }
     }
-    temp = arr[i + 1];
-    arr[i + 1] = arr[right];
-    arr[right] = temp;
-    return i + 1;
+    return right;
 }
 
 void quicksort(int arr[], int left, int right)
@@ -32,24 +58,13 @@ void quicksort(int arr[], int left, int right)
     }
 }
 
-void disp(int arr[], int size)
-{
-    for (int i = 0; i < size; i++)
-    {
-        printf("%d\t", arr[i]);
-    }
-    printf("\n");
-}
-
-void main()
+int main()
 {
     int arr[] = {38, 27, 43, 3, 9, 82, 10};
-    int size = sizeof(arr) / sizeof(arr[0]);
     int left = 0;
-    int right = size - 1;
-    disp(arr, size);
-
+    int right = (sizeof(arr) / sizeof(arr[0])) - 1;
     quicksort(arr, left, right);
+    disp(arr, right);
 
-    disp(arr, size);
+    return 0;
 }
